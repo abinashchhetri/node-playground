@@ -13,6 +13,8 @@ async function startServer() {
   server.listen(config.port, () => {
     logger.info(`app started at port ${config.port}`);
   });
+
+  //this is for git test
 }
 
 startServer();
