@@ -15,6 +15,7 @@ async function startServer() {
   });
 
   //this is for git test
+  console.log("git ko laghi");
 }
 
 startServer();
