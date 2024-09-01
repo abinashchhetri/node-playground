@@ -2,6 +2,7 @@ import { UserInterface } from "@/interfaces/UserInterface";
 import { Inject, Service } from "typedi";
 import jwt from "jsonwebtoken";
 import config from "@/config";
+import { time } from "console";
 
 @Service()
 export default class AuthService {
@@ -32,11 +33,35 @@ export default class AuthService {
     }
   }
 
-  private generateToken(user: UserInterface) {
+  public async forgetPassword(email: string, masterkey: string) {
+    console.log(masterkey, config.masterKey);
+    try {
+      const userData = await this.userModel.findOne({ email: email });
+
+      if (!userData) {
+        return { message: "email dosnt exist", status: 401 };
+      } else if (masterkey === config.masterKey) {
+        console.log("here");
+        const user = userData.toObject();
+        Reflect.deleteProperty(user, "password");
+        const token = this.generateToken(user, "10m");
+        return { status: 200, token, message: "can reset password" };
+      } else {
+        return {
+          status: 401,
+          message: "masterkey didn't match",
+        };
+      }
+    } catch (error) {
+      if (error) throw error;
+    }
+  }
+
+  private generateToken(user: UserInterface, duration: string = "1h") {
     // const today = new Date();
     // const expire = new Date(today);
     // expire.setDate(today.getDate() + 60);
 
-    return jwt.sign(user, config.jwtSecret, { expiresIn: "1h" });
+    return jwt.sign(user, config.jwtSecret, { expiresIn: duration });
   }
 }

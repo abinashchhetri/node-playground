@@ -1,10 +1,7 @@
-import { Router } from "express";
-import { RouterPropsType } from "../types";
 import AuthService from "@/services/AuthService";
-import userModel from "@/models/userModel";
+import { Router } from "express";
 import Container from "typedi";
-import { error } from "console";
-import Logger from "@/loaders/logger";
+import { RouterPropsType } from "../types";
 
 const authRouter = Router();
 export default ({ router }: RouterPropsType) => {
@@ -25,6 +22,24 @@ export default ({ router }: RouterPropsType) => {
       res.status(data.status).json(data);
     } catch (e) {
       next(e);
+    }
+  });
+
+  // forget password
+  authRouter.post("/forgetpassword", async (req, res, next) => {
+    const { email, masterkey } = req.body;
+
+    try {
+      const authService = Container.get(AuthService);
+      const serviceResponse = await authService.forgetPassword(
+        email,
+        masterkey
+      );
+
+      res.cookie("user", { token: serviceResponse.token });
+      res.status(serviceResponse.status).json(serviceResponse.message);
+    } catch (error) {
+      next(error);
     }
   });
 };

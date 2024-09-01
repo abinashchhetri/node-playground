@@ -8,8 +8,8 @@ export default async ({ server }: ExpressLoaderType) => {
     express({ server });
     Logger.info("express loaded");
 
-    await mongo();
-    Logger.info("mongo connected");
+    // await mongo();
+    // Logger.info("mongo connected");
 
     dependencyInjector([{ name: "userModel", model: userModel }]);
     Logger.info("dependency Injected");

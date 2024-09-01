@@ -1,6 +1,9 @@
 import { Application, json, urlencoded } from "express";
 import Logger from "./logger";
 import api from "@/api";
+import cookieParser from "cookie-parser";
+
+import cors from "cors";
 
 export type ExpressLoaderType = {
   server: Application;
@@ -12,8 +15,9 @@ export default ({ server }: ExpressLoaderType) => {
   });
 
   server.use(json());
+  server.use(cors());
   server.use(urlencoded({ extended: true }));
-
+  server.use(cookieParser());
   server.use("/api", api());
 
   server.use((req, res, next) => {

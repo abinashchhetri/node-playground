@@ -14,8 +14,7 @@ async function startServer() {
     logger.info(`app started at port ${config.port}`);
   });
 
-  //this is for git test
-  console.log("git ko laghi");
+
 }
 
 startServer();
