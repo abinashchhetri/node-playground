@@ -1,25 +1,7 @@
-import { RouterPropsType } from "../types";
+import upload from "@/middlewares/multer.middleware";
 import { Router } from "express";
+import { RouterPropsType } from "../types";
 import multer from "multer";
-import path from "path";
-import fs from "fs";
-
-// const uploadDir = path.resolve(__dirname, "../../upload");
-// if (!fs.existsSync(uploadDir)) {
-//   fs.mkdirSync(uploadDir);
-// }
-
-const storage = multer.diskStorage({
-  destination: (req, file, cb) => {
-    return cb(null, path.resolve(__dirname, "../../upload"));
-  },
-  filename: (req, file, cb) => {
-    const uniqueSuffix = Date.now() + "-";
-    return cb(null, file.originalname);
-  },
-});
-
-const upload = multer({ storage });
 
 const uploadImagesRouter = Router();
 
@@ -28,8 +10,14 @@ export default ({ router }: RouterPropsType) => {
 
   uploadImagesRouter.post(
     "/uploadImage",
-    upload.single("jasu"),
+    upload.array("jasu"),
     (req, res, next) => {
+      const photos = req.files as Express.Multer.File[];
+
+      photos.map((file) => {
+        console.log(file.filename);
+      });
+
       try {
         res.status(200).json({ success: "file Upload sccessful" });
       } catch (error) {
