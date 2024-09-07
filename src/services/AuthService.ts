@@ -1,8 +1,7 @@
-import { UserInterface } from "@/interfaces/UserInterface";
-import { Inject, Service } from "typedi";
-import jwt from "jsonwebtoken";
 import config from "@/config";
-import { time } from "console";
+import { UserInterface } from "@/interfaces/UserInterface";
+import jwt from "jsonwebtoken";
+import { Inject, Service } from "typedi";
 
 @Service()
 export default class AuthService {
